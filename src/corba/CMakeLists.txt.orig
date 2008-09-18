@@ -70,7 +70,6 @@ ENDIF( BUILD_STATIC )
 
 
 CONFIGURE_FILE( ${PROJ_SOURCE_DIR}/src/corba/orocos-rtt-corba.pc.in ${PROJ_BINARY_DIR}/src/corba/orocos-rtt-corba-${OROCOS_TARGET}.pc @ONLY)
-CONFIGURE_FILE( rtt-corba-config.h.in ${CMAKE_CURRENT_BINARY_DIR}/rtt-corba-config.h @ONLY)
 
 IF ( BUILD_STATIC )
   INSTALL_TARGETS(/lib orocos-rtt-corba_static-${OROCOS_TARGET})
@@ -80,4 +79,3 @@ ENDIF( BUILD_STATIC )
   INSTALL_FILES( /lib/pkgconfig FILES orocos-rtt-corba-${OROCOS_TARGET}.pc)
 
 ENDIF(ENABLE_CORBA)
-
