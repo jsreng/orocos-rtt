@@ -52,10 +52,11 @@ namespace RTT
      * @brief This interface represents the concept of
      * a condition which can be evaluated and return
      * true or false.
-     * @todo This class is a light-weight implementation of a
+     * @deprecated rtt-2.0: This class is a light-weight implementation of a
      * DataSource<bool>. It may be profitable to remove this low
-     * level class and replace its use by DataSource<bool>. That
-     * would also cause the removal of most Condition* classes.
+     * level class and replace its use by DataSource<bool> or make it a base,
+     * for example: 'EvaluationInterface'. If scripting requires an evaluatable
+     * object, it can always be given a DataSourceBase object instead of wrapping it.
      */
     class ConditionInterface
     {
@@ -79,6 +80,10 @@ namespace RTT
          * counting, when the command is first executed..
          * ConditionOnce has a similar need.  This function is
          * called at such times.
+         * @deprecated rtt-2.0: setup an 'out of band' construct to
+         * emulate this reset(): it is only needed/used by
+         * ConditionDuration and ConditionOnce and clutters the
+         * interface of the others.
          */
         virtual void reset();
 

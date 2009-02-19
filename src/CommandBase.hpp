@@ -56,6 +56,11 @@ namespace RTT
               public DispatchInterface
         {
             virtual ~CommandBase() {}
+            /**
+             * @deprecated This function is to be deprecated
+             * by on-the-spot cloning using tlsf.
+             * @return
+             */
             virtual CommandBase<F>* cloneI() const = 0;
         };
 

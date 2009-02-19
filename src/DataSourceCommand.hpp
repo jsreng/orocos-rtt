@@ -48,6 +48,14 @@ namespace RTT
   /**
    * A class that wraps a Command in a DataSource<bool>
    * interface.
+   * @deprecated rtt-2.0: Used by MethodC and Parser::parseValueChange.
+   * The encapsulated command is an Action. Renaming could be
+   * an option. Each get() executes the Action and returns the bool.
+   * Used for example for assignments, which may fail in complex types.
+   * Also used by CORBA Operations in combination with MethodC and updateCommand
+   * to store the result of a method in another data source. The MethodC
+   * then executes the updateCommand, which in turn calls the real method and then
+   * stores the result.
    */
   class DataSourceCommand
     : public DataSource<bool>

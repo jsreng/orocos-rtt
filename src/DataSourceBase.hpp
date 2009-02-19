@@ -116,6 +116,8 @@ namespace RTT
 
       /**
        * Reset the data to initial values.
+       * @deprecated rtt-2.0: It is not proven that this infectuous
+       * function is anywhere required.
        */
       virtual void reset();
 
@@ -147,6 +149,7 @@ namespace RTT
        * with the value of another DataSource when execute()'ed.
        * @return zero if the DataSource types do not match OR if the
        * contents of this DataSource can not be updated.
+       * @deprecated rtt-2.0: rename to updateAction and ActionInterface.
        */
       virtual CommandInterface* updateCommand( DataSourceBase* other);
 
@@ -165,6 +168,7 @@ namespace RTT
        * hash value of some type.
        * @return zero if the DataSource types do not match OR if the
        * contents of this DataSource can not be partially updated.
+       * @deprecated rtt-2.0: rename to updateAction and ActionInterface.
        */
       virtual CommandInterface* updatePartCommand( DataSourceBase* part, DataSourceBase* other);
 

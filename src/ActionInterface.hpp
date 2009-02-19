@@ -86,6 +86,8 @@ namespace RTT {
 
         /**
          * Reset this action. Must be used after execute() failed.
+         * @deprecated rtt-2.0: Not proven that this infectuous function
+         * is anywhere required.
          */
         virtual void reset();
 
@@ -95,17 +97,22 @@ namespace RTT {
          * default implementation returns always \a true, i.e.
          * after execute(), it was executed. Override this method
          * if it has more complex state semantics.
+         * @deprecated rtt-2.0: Not proven that this infectuous function
+         * is anywhere required.
          */
         virtual bool valid() const;
 
         /**
          * This is invoked some time before execute() at a time
          * when the action may read its function arguments.
+         * @deprecated rtt-2.0: Proven that this function is not necessary,
+         * even for Commands (dispatch() does this internally, see CommandDataSourceArgs).
          */
         virtual void readArguments() = 0;
 
         /**
          * The Clone Software Pattern.
+         * Used by factories that create by example.
          */
         virtual ActionInterface* clone() const = 0;
 

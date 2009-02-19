@@ -69,6 +69,9 @@ namespace RTT
 
             /**
              * Clone this implementation.
+             * @deprecated This function is nowhere used
+             * @return
+             */
              */
             virtual EventBase<Signature>* cloneI() const = 0;
         };

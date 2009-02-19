@@ -131,11 +131,14 @@ namespace RTT
                 if (minvoked)
                     return false;
                 minvoked = true;
-                this->readArguments();
+                // mcom is of type Functor.
+                mcom.readArguments(); // rtt-2.0: This is not the same readArguments as in ActionInterface.
                 return maccept = mcp->process( this );
             }
 
-            virtual void readArguments() { mcom.readArguments(); }
+            virtual void readArguments() { 
+                mcom.readArguments();
+            }
 
             virtual bool execute() {
                 mvalid = mcom.execute();

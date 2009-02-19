@@ -173,6 +173,9 @@ namespace RTT
                 return new LocalMethod<Signature>(*this);
             }
 
+            /**
+             * @deprated rtt-2.0: This function is nowhere used.
+             */
             MethodBase<Signature>* cloneI() const
             {
                 return new LocalMethod<Signature>(*this);

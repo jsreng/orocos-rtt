@@ -18,6 +18,10 @@ namespace RTT
               public ActionInterface
         {
             virtual ~MessageBase() {}
+            /**
+             * @deprecated This function is nowhere used
+             * @return
+             */
             virtual MessageBase<F>* cloneI() const = 0;
         };
     }
