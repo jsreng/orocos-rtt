@@ -55,7 +55,7 @@ namespace RTT
          * @return false when the MessageProcessor is not running or does not accept messages.
          * @see acceptMessages
          */
-        virtual bool process(ExecutableInterface* c);
+        virtual bool process(detail::ExecutableInterface* c);
 
         /**
          * Should the MessageProcessor accept or reject messages in \a process().
@@ -65,7 +65,7 @@ namespace RTT
 
     protected:
 
-        AtomicQueue<ExecutableInterface*,NonBlockingPolicy,NonBlockingPolicy>* a_queue;
+        AtomicQueue<detail::ExecutableInterface*,NonBlockingPolicy,NonBlockingPolicy>* a_queue;
 
         bool accept;
     };

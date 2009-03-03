@@ -6,6 +6,7 @@ namespace RTT
 {
 
     using namespace std;
+    using namespace detail;
 
     using namespace OS;
 

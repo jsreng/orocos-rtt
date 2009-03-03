@@ -117,32 +117,16 @@ namespace RTT
             }
 
             /**
-             * Construct a LocalMessage from a member function pointer and
-             * object to be executed in a TaskContext.
-             *
-             * @param mesg A pointer to a class member function
-             * @param object An object of the class which has \a mesg as member function
-             * and which is a subclass of TaskContext.
-             * @param taskc The TaskContext in which this message must be executed.
-             */
-            template<class M, class ObjectType>
-            LocalMessage(M mesg, ObjectType object, TaskContext* taskc)
-            {
-                this->setup(mesg, object);
-                this->mmp = taskc->engine()->messages();
-            }
-
-            /**
              * Construct a LocalMessage from a function pointer or function object.
              *
              * @param mesg a pointer to a function or function object.
-             * @param taskc The TaskContext in which to execute this message
+             * @param mp The MessageProcessor in which this message must be executed.
              */
             template<class M>
-            LocalMessage(M mesg, TaskContext* taskc)
+            LocalMessage(M mesg, MessageProcessor* mp)
             {
                 this->setup(mesg);
-                this->mmp = taskc->engine()->messages();
+                this->mmp = mp;
             }
 
             boost::function<Signature> getMessageFunction() const

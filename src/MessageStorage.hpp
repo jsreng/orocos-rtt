@@ -246,7 +246,7 @@ namespace RTT
         struct MessageStorage
             : public MessageStorageImpl<boost::function_traits<ToBind>::arity, ToBind>
         {
-                MessateStorage<ToBind>* rtclone() const
+                MessageStorage<ToBind>* rtclone() const
                 {
                     return new MessageStorage<ToBind>(this);
                 }

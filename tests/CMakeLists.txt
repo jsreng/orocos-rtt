@@ -49,6 +49,12 @@ IF (ENABLE_TESTS AND CPPUNIT)
     COMPILE_FLAGS "${CMAKE_CXX_FLAGS_ADD} ${RTT_CFLAGS} -DOROCOS_TARGET=${OROCOS_TARGET}")
     ADD_TEST( event-test event-test )
 
+    ADD_EXECUTABLE( message-test ${DO_EXCLUDE} test-runner.cpp message_test.cpp )
+    TARGET_LINK_LIBRARIES( message-test orocos-rtt-${OROCOS_TARGET} ${CPPUNIT} )
+    SET_TARGET_PROPERTIES( message-test PROPERTIES
+    COMPILE_FLAGS "${CMAKE_CXX_FLAGS_ADD} ${RTT_CFLAGS} -DOROCOS_TARGET=${OROCOS_TARGET}")
+    ADD_TEST( message-test message-test )
+
     ADD_EXECUTABLE( taskcontext-test ${DO_EXCLUDE} test-runner.cpp generictask_test.cpp generictask_test_2.cpp generictask_test_3.cpp )
     TARGET_LINK_LIBRARIES( taskcontext-test orocos-rtt-${OROCOS_TARGET} ${CPPUNIT} )
     SET_TARGET_PROPERTIES( taskcontext-test PROPERTIES

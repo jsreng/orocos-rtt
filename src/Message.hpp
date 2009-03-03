@@ -131,11 +131,12 @@ namespace RTT
          *
          * @param name The name of this message
          * @param meth A pointer to a class member function
-         * @param object An object of the class which has \a meth as member function.
+         * @param task_object A pointer to the object which has the above member function
+         * and which has a MessageProcessor.
          */
         template<class M, class ObjectType>
-        Message(std::string name, M meth, ObjectType object)
-            : Base( MessageBasePtr(new detail::LocalMessage<Signature>(meth, object) ) ),
+        Message(std::string name, M meth, ObjectType task_object)
+            : Base( MessageBasePtr(new detail::LocalMessage<Signature>(meth, task_object) ) ),
               mname(name)
         {}
 
@@ -146,8 +147,8 @@ namespace RTT
          * @param meth an pointer to a function or function object.
          */
         template<class M>
-        Message(std::string name, M meth)
-            : Base( MessageBasePtr(new detail::LocalMessage<Signature>(meth) ) ),
+        Message(std::string name, M meth, MessageProcessor* mp)
+            : Base( MessageBasePtr(new detail::LocalMessage<Signature>(meth, mp) ) ),
               mname(name)
         {}
 
@@ -193,11 +194,12 @@ namespace RTT
      *
      * @param name The name of the resulting Message object
      * @param message A pointer to a member function to be executed.
-     * @param object A pointer to the object which has the above member function.
+     * @param task_object A pointer to the object which has the above member function
+     * and which has a MessageProcessor.
      */
     template<class F, class O>
-    Message< typename detail::UnMember<F>::type > message(std::string name, F message, O object) {
-        return Message<  typename detail::UnMember<F>::type >(name, message, object);
+    Message< typename detail::UnMember<F>::type > message(std::string name, F message, O task_object) {
+        return Message<  typename detail::UnMember<F>::type >(name, message, task_object);
     }
 
     /**
@@ -207,18 +209,8 @@ namespace RTT
      * @param message A pointer to a function to be executed.
      */
     template<class F>
-    Message<F> message(std::string name, F message) {
-        return Message<F>(name, message);
-    }
-    /**
-     * Create a Message which executes a function locally.
-     *
-     * @param name The name of the resulting Message object
-     * @param message A pointer to a function to be executed.
-     */
-    template<class F>
-    Message< typename detail::ArgMember<F>::type > message_ds(std::string name, F message) {
-        return Message<  typename detail::ArgMember<F>::type >(name, message);
+    Message<F> message(std::string name, F message, MessageProcessor* mp) {
+        return Message<F>(name, message, mp);
     }
 }
 
