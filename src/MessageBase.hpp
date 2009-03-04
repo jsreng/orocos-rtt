@@ -14,15 +14,10 @@ namespace RTT
          */
         template<class F>
         struct MessageBase
-            : public InvokerBase<F>,
+            : public InvokerBase<F,bool>,
               public ActionInterface
         {
             virtual ~MessageBase() {}
-            /**
-             * @deprecated This function is nowhere used
-             * @return
-             */
-            virtual MessageBase<F>* cloneI() const = 0;
         };
     }
 }

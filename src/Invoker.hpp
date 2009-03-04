@@ -52,40 +52,40 @@ namespace RTT
          * A class which converts a function type signature \a F
          * to a virtual operator()() interface.
          */
-        template<int, class F>
+        template<int, class F, class Return>
         struct InvokerBaseImpl;
 
-        template<class F>
-        struct InvokerBaseImpl<0,F>
+        template<class F, class R>
+        struct InvokerBaseImpl<0,F,R>
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef R result_type;
             virtual ~InvokerBaseImpl() {}
             virtual result_type operator()() = 0;
         };
 
-        template<class F>
-        struct InvokerBaseImpl<1,F>
+        template<class F, class R>
+        struct InvokerBaseImpl<1,F,R>
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef R result_type;
             typedef typename boost::function<F>::arg1_type arg1_type;
             virtual ~InvokerBaseImpl() {}
             virtual result_type operator()(arg1_type a1) = 0;
         };
 
-        template<class F>
-        struct InvokerBaseImpl<2,F>
+        template<class F, class R>
+        struct InvokerBaseImpl<2,F,R>
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef R result_type;
             typedef typename boost::function<F>::arg1_type arg1_type;
             typedef typename boost::function<F>::arg2_type arg2_type;
             virtual ~InvokerBaseImpl() {}
             virtual result_type operator()(arg1_type a1, arg2_type a2) = 0;
         };
 
-        template<class F>
-        struct InvokerBaseImpl<3,F>
+        template<class F, class R>
+        struct InvokerBaseImpl<3,F,R>
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef R result_type;
             typedef typename boost::function<F>::arg1_type arg1_type;
             typedef typename boost::function<F>::arg2_type arg2_type;
             typedef typename boost::function<F>::arg3_type arg3_type;
@@ -93,10 +93,10 @@ namespace RTT
             virtual result_type operator()(arg1_type a1, arg2_type a2, arg3_type a3) = 0;
         };
 
-        template<class F>
-        struct InvokerBaseImpl<4,F>
+        template<class F, class R>
+        struct InvokerBaseImpl<4,F,R>
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef R result_type;
             typedef typename boost::function<F>::arg1_type arg1_type;
             typedef typename boost::function<F>::arg2_type arg2_type;
             typedef typename boost::function<F>::arg3_type arg3_type;
@@ -105,19 +105,19 @@ namespace RTT
             virtual result_type operator()(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4) = 0;
         };
 
-        template<class F>
+        template<class F, class Return = typename boost::function_traits<F>::result_type>
         struct InvokerBase
-            : public InvokerBaseImpl<boost::function_traits<F>::arity, F>
+            : public InvokerBaseImpl<boost::function_traits<F>::arity, F, Return>
         {};
 
-        template<int, class F, class BaseImpl>
+        template<int, class F, class BaseImpl, class R>
         struct InvokerImpl;
 
-        template<class F, class BaseImpl>
-        struct InvokerImpl<0,F,BaseImpl>
+        template<class F, class BaseImpl, class R>
+        struct InvokerImpl<0,F,BaseImpl,R>
             : public BaseImpl
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef R result_type;
             /**
              * Invoke this operator if the method has no arguments.
              */
@@ -127,11 +127,11 @@ namespace RTT
             }
         };
 
-        template<class F, class BaseImpl>
-        struct InvokerImpl<1,F,BaseImpl>
+        template<class F, class BaseImpl, class R>
+        struct InvokerImpl<1,F,BaseImpl,R>
             : public BaseImpl
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef R result_type;
             typedef typename boost::function_traits<F>::arg1_type arg1_type;
             /**
              * Invoke this operator if the method has one argument.
@@ -142,11 +142,11 @@ namespace RTT
             }
         };
 
-        template<class F, class BaseImpl>
-        struct InvokerImpl<2,F,BaseImpl>
+        template<class F, class BaseImpl, class R>
+        struct InvokerImpl<2,F,BaseImpl,R>
             : public BaseImpl
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef R result_type;
             typedef typename boost::function_traits<F>::arg1_type arg1_type;
             typedef typename boost::function_traits<F>::arg2_type arg2_type;
 
@@ -160,11 +160,11 @@ namespace RTT
 
         };
 
-        template<class F, class BaseImpl>
-        struct InvokerImpl<3,F,BaseImpl>
+        template<class F, class BaseImpl, class R>
+        struct InvokerImpl<3,F,BaseImpl, R>
             : public BaseImpl
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef R result_type;
             typedef typename boost::function_traits<F>::arg1_type arg1_type;
             typedef typename boost::function_traits<F>::arg2_type arg2_type;
             typedef typename boost::function_traits<F>::arg3_type arg3_type;
@@ -179,11 +179,11 @@ namespace RTT
 
         };
 
-        template<class F, class BaseImpl>
-        struct InvokerImpl<4,F,BaseImpl>
+        template<class F, class BaseImpl, class R>
+        struct InvokerImpl<4,F,BaseImpl, R>
             : public BaseImpl
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef R result_type;
             typedef typename boost::function_traits<F>::arg1_type arg1_type;
             typedef typename boost::function_traits<F>::arg2_type arg2_type;
             typedef typename boost::function_traits<F>::arg3_type arg3_type;
@@ -204,9 +204,9 @@ namespace RTT
          * signature to invoke and an implementation in which
          * an operator(args) is available which has this signature.
          */
-        template<class F, class BaseImpl>
+        template<class F, class BaseImpl, class Return = typename boost::function_traits<F>::result_type>
         struct Invoker
-            : public InvokerImpl<boost::function_traits<F>::arity, F, BaseImpl>
+            : public InvokerImpl<boost::function_traits<F>::arity, F, BaseImpl, Return>
         {};
 
 
@@ -216,13 +216,13 @@ namespace RTT
          * @param Signature The C-style function signature (function type).
          * @param ToInvoke A class type which is called within operator().
          */
-        template<int, class Signature, class ToInvoke>
+        template<int, class Signature, class ToInvoke, typename Return = typename boost::function_traits<Signature>::result_type>
         struct InvokerSignature;
 
-        template<class F, class ToInvoke>
-        struct InvokerSignature<0,F,ToInvoke>
+        template<class F, class ToInvoke, typename Return>
+        struct InvokerSignature<0,F,ToInvoke,Return>
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef Return result_type;
 
             InvokerSignature() : impl() {}
             InvokerSignature(ToInvoke implementation) : impl(implementation) {}
@@ -241,10 +241,10 @@ namespace RTT
             ToInvoke impl;
         };
 
-        template<class F, class ToInvoke>
-        struct InvokerSignature<1,F,ToInvoke>
+        template<class F, class ToInvoke, typename Return>
+        struct InvokerSignature<1,F,ToInvoke,Return>
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef Return result_type;
             typedef typename boost::function_traits<F>::arg1_type arg1_type;
 
             InvokerSignature() : impl() {}
@@ -264,10 +264,10 @@ namespace RTT
             ToInvoke impl;
         };
 
-        template<class F, class ToInvoke>
-        struct InvokerSignature<2,F,ToInvoke>
+        template<class F, class ToInvoke, typename Return>
+        struct InvokerSignature<2,F,ToInvoke,Return>
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef Return result_type;
             typedef typename boost::function_traits<F>::arg1_type arg1_type;
             typedef typename boost::function_traits<F>::arg2_type arg2_type;
 
@@ -289,10 +289,10 @@ namespace RTT
             ToInvoke impl;
         };
 
-        template<class F, class ToInvoke>
-        struct InvokerSignature<3,F,ToInvoke>
+        template<class F, class ToInvoke, typename Return>
+        struct InvokerSignature<3,F,ToInvoke,Return>
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef Return result_type;
             typedef typename boost::function_traits<F>::arg1_type arg1_type;
             typedef typename boost::function_traits<F>::arg2_type arg2_type;
             typedef typename boost::function_traits<F>::arg3_type arg3_type;
@@ -315,10 +315,10 @@ namespace RTT
             ToInvoke impl;
         };
 
-        template<class F, class ToInvoke>
-        struct InvokerSignature<4,F,ToInvoke>
+        template<class F, class ToInvoke, typename Return>
+        struct InvokerSignature<4,F,ToInvoke,Return>
         {
-            typedef typename boost::function_traits<F>::result_type result_type;
+            typedef Return result_type;
             typedef typename boost::function_traits<F>::arg1_type arg1_type;
             typedef typename boost::function_traits<F>::arg2_type arg2_type;
             typedef typename boost::function_traits<F>::arg3_type arg3_type;

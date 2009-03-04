@@ -35,15 +35,17 @@ namespace RTT
     class Message
         : public detail::InvokerSignature<boost::function_traits<FunctionT>::arity,
                                           FunctionT,
-                                          boost::shared_ptr< detail::MessageBase<FunctionT> > >
+                                          boost::shared_ptr< detail::MessageBase<FunctionT> >,
+                                          bool>
     {
         std::string mname;
         typedef detail::InvokerSignature<boost::function_traits<FunctionT>::arity,
                                          FunctionT,
-                                         boost::shared_ptr< detail::MessageBase<FunctionT> > > Base;
+                                         boost::shared_ptr< detail::MessageBase<FunctionT> >,
+                                         bool> Base;
     public:
         typedef FunctionT Signature;
-        typedef typename boost::function_traits<Signature>::result_type result_type;
+        typedef bool result_type;
         typedef boost::function_traits<Signature> traits;
         typedef boost::shared_ptr< detail::MessageBase<FunctionT> > MessageBasePtr;
 

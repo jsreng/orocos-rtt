@@ -12,7 +12,7 @@ namespace RTT
         class ExecutableInterface
         {
         public:
-            virtual ~ExecutableInterface();
+            virtual ~ExecutableInterface() {}
 
             /**
              * Execute functionality and free this object.

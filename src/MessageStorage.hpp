@@ -248,7 +248,7 @@ namespace RTT
         {
                 MessageStorage<ToBind>* rtclone() const
                 {
-                    return new MessageStorage<ToBind>(this);
+                    return new MessageStorage<ToBind>(*this);
                 }
         };
 

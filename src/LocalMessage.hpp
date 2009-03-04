@@ -30,6 +30,8 @@ namespace RTT
                 return true;
             }
 
+            void readArguments() {}
+
             /**
              * Invoke this operator if the message has no arguments.
              */
@@ -95,7 +97,7 @@ namespace RTT
         */
         template<class FunctionT>
         struct LocalMessage
-            : public Invoker<FunctionT,LocalMessageImpl<FunctionT> >
+            : public Invoker<FunctionT,LocalMessageImpl<FunctionT>, bool >
         {
             typedef FunctionT Signature;
             typedef bool result_type;
@@ -112,7 +114,7 @@ namespace RTT
             template<class M, class ObjectType>
             LocalMessage(M mesg, ObjectType object)
             {
-                this->setup(mesg, object);
+                this->mmesg.setup(mesg, object);
                 this->mmp = object->engine()->messages();
             }
 
@@ -125,7 +127,7 @@ namespace RTT
             template<class M>
             LocalMessage(M mesg, MessageProcessor* mp)
             {
-                this->setup(mesg);
+                this->mmesg.setup(mesg);
                 this->mmp = mp;
             }
 
@@ -134,6 +136,9 @@ namespace RTT
                 return this->function();
             }
 
+            RTT::ActionInterface* clone() const {
+                return new LocalMessage(*this);
+            }
 
         };
     }
