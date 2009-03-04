@@ -18,6 +18,7 @@ class MessageTest : public CppUnit::TestFixture
     CPPUNIT_TEST( testMessage );
     CPPUNIT_TEST( testMessageFactory );
     CPPUNIT_TEST( testRemoteMessage );
+    CPPUNIT_TEST( testMessageC );
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -33,6 +34,7 @@ public:
 
     void testMessage();
     void testRemoteMessage();
+    void testMessageC();
     void testMessageFactory();
 };
 
