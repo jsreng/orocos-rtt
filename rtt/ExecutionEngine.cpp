@@ -58,7 +58,7 @@ namespace RTT
 
     ExecutionEngine::ExecutionEngine( TaskCore* owner )
         : taskc(owner), estate( Stopped ),
-          cproc( 0 ), pproc( 0 ), smproc( 0 ), eproc( 0 )
+          pproc( 0 ), smproc( 0 ), eproc( 0 )
     {
         this->setup();
     }
@@ -73,7 +73,6 @@ namespace RTT
         delete smproc;
         delete pproc;
         delete eproc;
-        delete cproc;
 
         // make a copy to avoid call-back troubles:
         std::vector<TaskCore*> copy = children;
@@ -90,11 +89,6 @@ namespace RTT
         if (taskc)
             Logger::log() << Logger::Debug << "Creating ExecutionEngine for "+taskc->getName()<<Logger::endl;
 
-#ifdef OROPKG_EXECUTION_ENGINE_COMMANDS
-        cproc = new CommandProcessor(ORONUM_EXECUTION_PROC_QUEUE_SIZE);
-#else
-        cproc = 0;
-#endif
 #ifdef OROPKG_EXECUTION_ENGINE_PROGRAMS
         pproc = new ProgramProcessor(ORONUM_EXECUTION_PROC_QUEUE_SIZE);
 #else
@@ -130,8 +124,6 @@ namespace RTT
     {
         Logger::In in("ExecutionEngine::setActivity");
 
-        if (cproc)
-            cproc->setActivity(t);
         if (pproc)
             pproc->setActivity(t);
         if (smproc)
@@ -286,8 +278,6 @@ namespace RTT
         assert (ret);
         if ( smproc ) ret = smproc->initialize();
         assert (ret);
-        if ( cproc  ) ret = cproc->initialize();
-        assert (ret);
         if ( eproc ) ret =eproc->initialize();
         assert (ret);
         return ret;
@@ -295,7 +285,7 @@ namespace RTT
 
     bool ExecutionEngine::hasWork()
     {
-        return cproc->hasWork() || eproc->hasWork();
+        return eproc->hasWork();
     }
 
     void ExecutionEngine::step() {
@@ -309,11 +299,6 @@ namespace RTT
 #ifdef OROPKG_EXECUTION_ENGINE_STATEMACHINES
         if (smproc)
             smproc->step();
-        if ( !this->getActivity()->isRunning() ) return;
-#endif
-#ifdef OROPKG_EXECUTION_ENGINE_COMMANDS
-        if (cproc)
-            cproc->step();
         if ( !this->getActivity()->isRunning() ) return;
 #endif
 #ifdef OROPKG_EXECUTION_ENGINE_EVENTS
@@ -365,8 +350,6 @@ namespace RTT
             pproc->finalize();
         if (smproc)
             smproc->finalize();
-        if (cproc)
-            cproc->finalize();
         if (eproc)
             eproc->finalize();
         // call all children, but only if they are not in the error state !
@@ -385,15 +368,6 @@ namespace RTT
 
         // Finally:
         estate = Stopped;
-    }
-
-    CommandProcessor* ExecutionEngine::commands() const {
-#ifdef OROPKG_EXECUTION_ENGINE_COMMANDS
-        return dynamic_cast<CommandProcessor*>(cproc);
-#else
-        return 0;
-#endif
-
     }
 
     ProgramProcessor* ExecutionEngine::programs() const {
@@ -417,13 +391,6 @@ namespace RTT
         return dynamic_cast<EventProcessor*>(eproc);
 #else
         return 0;
-#endif
-    }
-
-    void ExecutionEngine::setCommandProcessor(CommandProcessor* c) {
-#ifdef OROPKG_EXECUTION_ENGINE_COMMANDS
-        delete cproc;
-        cproc = c;
 #endif
     }
 
